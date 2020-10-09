@@ -169,13 +169,27 @@ final public class PhotoLibraryPickerViewController: UIViewController {
                 self.checkStatus(completionHandler: completionHandler)
             }
             
-        case .authorized:
+        case .authorized, .limited:
             /// Authorization granted by user for this app.
             DispatchQueue.main.async {
                 self.fetchPhotos(completionHandler: completionHandler)
             }
             
         case .denied, .restricted:
+            /// User has denied the current app to access the contacts.
+            let productName = Bundle.main.dlgpicker_appName
+            let alert = UIAlertController(title: "Permission denied", message: "\(productName) does not have access to contacts. Please, allow the application to access to your photo library.", preferredStyle: .alert)
+            alert.addAction(title: "Settings", style: .destructive) { action in
+                if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(settingsURL)
+                }
+            }
+            alert.addAction(title: "OK".localized, style: .cancel) { [unowned self] action in
+                self.alertController?.dismiss(animated: true)
+            }
+            alert.show()
+        
+        default:
             /// User has denied the current app to access the contacts.
             let productName = Bundle.main.dlgpicker_appName
             let alert = UIAlertController(title: "Permission denied", message: "\(productName) does not have access to contacts. Please, allow the application to access to your photo library.", preferredStyle: .alert)

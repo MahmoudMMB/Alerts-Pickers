@@ -283,8 +283,16 @@ class ViewController: UIViewController {
             
         case .dataPicker:
             let alert = UIAlertController(title: "Date Picker", message: "Select Date", preferredStyle: self.alertStyle)
-            alert.addDatePicker(mode: .dateAndTime, date: Date(), minimumDate: nil, maximumDate: nil) { date in
-                Log(date)
+            
+            if #available(iOS 14.0, *) {
+                alert.addDatePickerWithStyle(mode: .dateAndTime, date: Date(), minimumDate: nil, maximumDate: nil, preferredDatePickerStyle: .inline) { (date) in
+                    Log(date)
+                }
+            } else {
+                // Fallback on earlier versions
+                alert.addDatePicker(mode: .dateAndTime, date: Date(), minimumDate: nil, maximumDate: nil) { date in
+                    Log(date)
+                }
             }
             alert.addAction(title: "Done".localized, style: .cancel)
             alert.show()

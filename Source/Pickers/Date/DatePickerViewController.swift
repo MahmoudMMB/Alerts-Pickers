@@ -9,6 +9,44 @@ extension UIAlertController {
     ///   - date: selected date of date picker
     ///   - minimumDate: minimum date of date picker
     ///   - maximumDate: maximum date of date picker
+    ///   - preferredDatePickerStyle: preferred Date Picker Style
+    ///   - action: an action for datePicker value change
+    
+    @available(iOS 14.0, *)
+    public func addDatePickerWithStyle(mode: UIDatePicker.Mode, date: Date?, minimumDate: Date? = nil, maximumDate: Date? = nil, preferredDatePickerStyle: UIDatePickerStyle, action: DatePickerViewController.Action?) {
+        let datePicker = DatePickerViewController(mode: mode, date: date, minimumDate: minimumDate, maximumDate: maximumDate, action: action)
+        datePicker.datePicker.preferredDatePickerStyle = preferredDatePickerStyle
+        switch preferredDatePickerStyle {
+        case .automatic, .compact:
+            let height: CGFloat = 50
+            set(vc: datePicker, height: height)
+        case .wheels:
+            let height: CGFloat = 217
+            set(vc: datePicker, height: height)
+        case .inline:
+            var height: CGFloat = 400
+            switch self.preferredStyle {
+            case .actionSheet:
+                height = 400
+            case .alert:
+                height = 300
+            default:
+                height = 217
+            }
+            set(vc: datePicker, height: height)
+        default:
+            let height: CGFloat = 217
+            set(vc: datePicker, height: height)
+        }
+    }
+    
+    /// Add a date picker
+    ///
+    /// - Parameters:
+    ///   - mode: date picker mode
+    ///   - date: selected date of date picker
+    ///   - minimumDate: minimum date of date picker
+    ///   - maximumDate: maximum date of date picker
     ///   - action: an action for datePicker value change
     
     public func addDatePicker(mode: UIDatePicker.Mode, date: Date?, minimumDate: Date? = nil, maximumDate: Date? = nil, action: DatePickerViewController.Action?) {

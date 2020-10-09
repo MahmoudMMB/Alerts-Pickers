@@ -28,6 +28,7 @@ Advanced usage of native UIAlertController with TextField, TextView, DatePicker,
 - [x] Pure Swift 5.
 - [x] Arabic countries.
 - [x] Picker view with search bar.
+- [x] iOS 14 support
 
 <div align = "center">
 <img src="Assets/gifs/actionSheet-.gif" width="400" />
@@ -210,9 +211,17 @@ alert.show()
 </div>
 
 ```swift
+For iOS 14
 let alert = UIAlertController(style: .actionSheet, title: "Select date")
-alert.addDatePicker(mode: .dateAndTime, date: date, minimumDate: minDate, maximumDate: maxDate) { date in
-    // action with selected date
+if #available(iOS 14.0, *) {
+    alert.addDatePickerWithStyle(mode: .dateAndTime, date: Date(), minimumDate: nil, maximumDate: nil, preferredDatePickerStyle: .inline) { (date) in
+        Log(date)
+    }
+} else {
+    // Fallback on earlier versions
+    alert.addDatePicker(mode: .dateAndTime, date: Date(), minimumDate: nil, maximumDate: nil) { date in
+        Log(date)
+    }
 }
 alert.addAction(title: "OK", style: .cancel)
 alert.show()

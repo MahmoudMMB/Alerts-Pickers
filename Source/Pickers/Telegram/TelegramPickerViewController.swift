@@ -492,7 +492,7 @@ final public class TelegramPickerViewController: UIViewController {
                 self.checkStatus()
             }
             
-        case .authorized:
+        case .authorized, .limited:
             /// Authorization granted by user for this app.
             DispatchQueue.main.async {
                 self.runAssetsCollection()
@@ -500,6 +500,12 @@ final public class TelegramPickerViewController: UIViewController {
             
         case .denied, .restricted:
             /// User has denied the current app to access the contacts.
+            
+            if let alert = localizer.localizedAlert(failure: .noAccessToPhoto) {
+                alert.show()
+            }
+        default:
+            // User has denied the current app to access the contacts.
             
             if let alert = localizer.localizedAlert(failure: .noAccessToPhoto) {
                 alert.show()
